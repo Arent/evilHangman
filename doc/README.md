@@ -25,6 +25,7 @@
  </blockquote>
 
 <h2>GameControler</h2>
+
 	Check if input is valid
 	Choose subset Words list
 	Initialize new game
