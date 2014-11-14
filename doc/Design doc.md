@@ -8,10 +8,10 @@
 
 <h3>Main screen:</h3>
 <p>This screen will show the made guesses, remaining letters, remaining guesses, a button to the settings, a button for a new game and will contain to popups for when the Human has won or lost the game.</p>
-
-
+![Alt text](https://github.com/Arent/evilHangman/blob/master/doc/homeScreen.jpg)
 <h3>Flip screen</h3>
 <p>This screen will have a button tot the main screen, a slider to adjust the number of guesses the Human has and a slider to adjust the max length of the words</p>
+![Alt text](https://github.com/Arent/evilHangman/blob/master/doc/Settings.jpg)
 
 <h2>Classes</h2>
 
