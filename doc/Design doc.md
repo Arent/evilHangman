@@ -1,4 +1,4 @@
-h1>evilHangman</h1>
+<h1>evilHangman</h1>
 ===========
 <p>This is just hangman. However, the computer will win(by changing words so it will dodge the guesses of the Human)</p>
 
@@ -23,7 +23,7 @@ h1>evilHangman</h1>
 	Needs # remaining guesses
 	Needs to know if game is won or lost
 
- </blockquote>\
+ </blockquote>
 <h2>GameControler</h2>
 
 	Check if input is valid
