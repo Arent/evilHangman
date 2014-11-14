@@ -18,7 +18,6 @@
 
   <h2>MainViewController</h2>
   <blockquote>
-  
  	Updates the main view
 	Needs array with guessed letters
 	Needs # remaining guesses
