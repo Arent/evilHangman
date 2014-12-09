@@ -4,10 +4,24 @@
 <dict>
 	<key>words</key>
 	<array>
+		<string>fob</string>
+		<string>boo</string>
+		<string>hop</string>
+		<string>jop</string>
+		<string>rip</string>
+		<string>kip</string>
+		<string>tep</string>
+		<string>ttp</string>
+		<string>qqp</string>
+		<string>yyp</string>
+		<string>oop</string>
+		<string>lop</string>
+		<string>lip</string>
+		<string>uup</string>
+		<string>rep</string>
+		<string>kop</string>
 		<string>hi</string>
-		<string>bye</string>
-		<string>bar</string>
-		<string>foo</string>
+		<string>noo</string>
 		<string>foobar</string>
 	</array>
 </dict>
