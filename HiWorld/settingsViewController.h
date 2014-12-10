@@ -16,4 +16,5 @@
     IBOutlet UILabel *labelSliderWords;
 }
 -(IBAction)slidetheslider:(id)sender;
+-(IBAction)loadMainView:(id)sender;
 @end

@@ -8,31 +8,28 @@
 
 #import <UIKit/UIKit.h>
 
-@interface gameControler : UIViewController <UIAlertViewDelegate> {
-    int _remainingGuesses;
-    int _wordLength;
-    NSString *guessedWord;
-    NSArray *words;
-    NSMutableArray *guessedLetters;
-    NSMutableCharacterSet *remainingLetters;
-}
-@property (assign, nonatomic, readwrite) BOOL  gameRunning;
-@property (copy, nonatomic, readwrite) NSMutableArray  *guessedWord;
-@property (copy, nonatomic, readwrite) NSMutableArray  *guessedLetters;
+@interface gameControler : UIViewController <UIAlertViewDelegate>
+
+
+@property (retain, nonatomic, readwrite) NSMutableArray  *guessedWord;
+@property (retain, nonatomic, readwrite) NSMutableArray  *guessedLetters;
 @property (assign, nonatomic, readwrite) int  remainingGuesses;
+@property (assign, nonatomic, readwrite) int  wordLength;
 @property (copy, nonatomic, readwrite) NSString  *aRandomCorrectWord;
+@property (retain, nonatomic, readwrite) NSMutableCharacterSet *remainingLetters;
+@property (copy, nonatomic, readwrite) NSArray *words;
 
 
 - (id)init;
-
-- (Boolean)gameWon;
-- (Boolean)gameLost;
-- (Boolean)validInput: (NSString *)input;
 - (void)gameflow: (NSString *)input;
-- (void)chooseWordSubset: (NSString *)input;
+- (Boolean)validInput: (NSString *)input;
+- (NSMutableDictionary *)makeEquivalanceClasses: (NSString *)input;
+- (int)bestEquivalanceClass:(NSMutableDictionary *)equivalanceClasses;
 - (NSMutableArray *)makeIndices:(int)code;
 - (int)indicesToCode:(NSMutableArray *)indices;
 - (NSMutableArray *)wordToIndices: (NSString *)word andInput:(NSString *)input;
 - (void)updateGuessedWordWithCode:(int)code andInput:(NSString *)input;
+- (Boolean)gameWon;
+- (Boolean)gameLost;
 
 @end

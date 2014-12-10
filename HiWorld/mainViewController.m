@@ -8,7 +8,7 @@
 
 #import "mainViewController.h"
 #import "gameControler.h"
-
+#import "settingsViewController.h"
 
 @interface mainViewController () <UITextFieldDelegate>{
     
@@ -30,6 +30,7 @@
     self.textField.delegate=self;
     self.textField.hidden = YES;
     userOutput.text= textField.text;
+    //initiate new game.
     [self newGame:nil];
 }
 
@@ -39,13 +40,15 @@
 }
 
 
-// Deze functie wordt elke keer aangeroepen als de gebruiker een toets indrukt.
+// This function is called everytime when the user presses a key.
  - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
         [game gameflow:string]; // gives control to input function
+        //updates user output
         self.userOutput.text= [NSString stringWithFormat:@"%@" , [self makeStringOutput:[game guessedWord]]];
         self.outputGuesses.text = [NSString stringWithFormat:@"%d" , [game remainingGuesses]];
         self.userGuesedLetters.text = [NSString stringWithFormat:@"%@" , [self sortArray:[game guessedLetters]]];
+    //Checks if game is won or lost and creates an alert.
     if([game gameWon]){
         [self.textField resignFirstResponder];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"What the F _ CK?"
@@ -66,6 +69,8 @@
     }
     return YES;
 }
+
+//This function sorts an array.
 -(NSString *)sortArray: (NSMutableArray*)array{
     NSMutableArray *array_sorted = [[NSMutableArray alloc]init];
     NSString *string= @"";
@@ -78,6 +83,7 @@
     return string;
 }
 
+//This function transfers an mutable array to a readable string.
 -(NSString *)makeStringOutput: (NSMutableArray*)array{
     NSString *output =@"";
     for( id element in array){
@@ -110,5 +116,18 @@
     
 }
 
-
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+
+

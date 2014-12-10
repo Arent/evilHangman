@@ -7,7 +7,7 @@
 //
 
 #import "settingsViewController.h"
-
+#import "mainViewController.h"
 @implementation settingsViewController
 
 -(IBAction)slidetheslider:(id)sender{
@@ -36,6 +36,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recrented.
 }
+
 
 @end
 

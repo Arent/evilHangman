@@ -46,7 +46,6 @@
 		85AA36681A0CE94A00FA542C /* HiWorldTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HiWorldTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		85AA366D1A0CE94A00FA542C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		85AA366E1A0CE94A00FA542C /* HiWorldTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HiWorldTests.m; sourceTree = "<group>"; };
-		85AA367A1A0CEAAF00FA542C /* settingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = settingsViewController.h; sourceTree = "<group>"; };
 		85AA367B1A0CEAAF00FA542C /* settingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = settingsViewController.m; sourceTree = "<group>"; };
 		85F710441A378FA900138DAB /* words.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = words.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -96,7 +95,6 @@
 				859D6EB91A29F66D00080BB0 /* gameControler.m */,
 				85AA36591A0CE94A00FA542C /* mainViewController.h */,
 				85AA365A1A0CE94A00FA542C /* mainViewController.m */,
-				85AA367A1A0CEAAF00FA542C /* settingsViewController.h */,
 				85AA367B1A0CEAAF00FA542C /* settingsViewController.m */,
 				85AA365C1A0CE94A00FA542C /* Main.storyboard */,
 				85AA365F1A0CE94A00FA542C /* Images.xcassets */,
