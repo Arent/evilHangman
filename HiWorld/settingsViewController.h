@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface settingsViewController : UIViewController{
-    //float test;
+
     IBOutlet UISlider *sliderGuesses;
     IBOutlet UILabel *labelSliderGuesses;
     IBOutlet UISlider *sliderWords;

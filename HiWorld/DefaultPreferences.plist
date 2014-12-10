@@ -3,8 +3,8 @@
 <plist version="1.0">
 <dict>
 	<key>numberOfGuesses</key>
-	<integer>10</integer>
+	<integer>6</integer>
 	<key>wordLength</key>
-	<integer>3</integer>
+	<integer>8</integer>
 </dict>
 </plist>

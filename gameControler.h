@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface gameControler : UIViewController{
+@interface gameControler : UIViewController <UIAlertViewDelegate> {
     int _remainingGuesses;
     int _wordLength;
     NSString *guessedWord;
@@ -20,17 +20,19 @@
 @property (copy, nonatomic, readwrite) NSMutableArray  *guessedWord;
 @property (copy, nonatomic, readwrite) NSMutableArray  *guessedLetters;
 @property (assign, nonatomic, readwrite) int  remainingGuesses;
+@property (copy, nonatomic, readwrite) NSString  *aRandomCorrectWord;
 
 
 - (id)init;
+
 - (Boolean)gameWon;
 - (Boolean)gameLost;
 - (Boolean)validInput: (NSString *)input;
-- (Boolean)validCode: (int)code;
-- (void)input: (NSString *)input;
+- (void)gameflow: (NSString *)input;
 - (void)chooseWordSubset: (NSString *)input;
-- (NSPredicate *)makePredicateIndices:(NSMutableArray *)indices andInput:(NSString *)input;
 - (NSMutableArray *)makeIndices:(int)code;
+- (int)indicesToCode:(NSMutableArray *)indices;
+- (NSMutableArray *)wordToIndices: (NSString *)word andInput:(NSString *)input;
 - (void)updateGuessedWordWithCode:(int)code andInput:(NSString *)input;
 
 @end

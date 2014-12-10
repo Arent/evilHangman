@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface mainViewController : UIViewController <UIAlertViewDelegate>  {
+@interface mainViewController : UIViewController <UIAlertViewDelegate>{
     IBOutlet UITextField *textField;
     IBOutlet UILabel *userOutput;
     IBOutlet UILabel *userGuesedLetters;
@@ -23,4 +23,5 @@
 -(NSString *)sortArray: (NSMutableArray*)array;
 -(NSString *)makeStringOutput: (NSMutableArray*)array;
 -(IBAction)newGame:(id)sender;
+
 @end

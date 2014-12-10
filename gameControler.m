@@ -7,14 +7,18 @@
 //
 
 #import "gameControler.h"
+#import "mainViewController.h"
 
-@implementation gameControler
+@implementation gameControler{
+    mainViewController *view;
+}
 
 
 //@synthesize gameRunning;
 @synthesize guessedWord =_guessedWord;
 @synthesize guessedLetters =_guessedLetters;
 @synthesize remainingGuesses =_remainingGuesses;
+@synthesize aRandomCorrectWord=_aRandomCorrectWord;
 
 -(id) init{
     //load plist
@@ -25,55 +29,39 @@
     NSDictionary *defaultPrefs = [NSDictionary dictionaryWithContentsOfURL:defaultPrefsFile];
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultPrefs];
     
+    //initialize game variabels
     _remainingGuesses = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"numberOfGuesses"];
     _wordLength = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"wordLength"];
     words= [[myDic valueForKey:@"words"] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"length == %d",_wordLength]]; //filtert op woordlengte
-    remainingLetters = [NSMutableCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyz"];
-    //[self setGameRunning:YES];
-    //[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"runningGame"]; dit werkt allemaal niet, even vragen
-    //[[NSUserDefaults standardUserDefaults] synchronize];
+    remainingLetters = [NSMutableCharacterSet characterSetWithCharactersInString:@"ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
     _guessedWord= [[NSMutableArray alloc]init];
     _guessedLetters=[[NSMutableArray alloc]init];
-
     for(int i = 0;i <_wordLength;i++){
         [_guessedWord addObject:@""];
     }
-
     return self;
 }
 
-
-- (Boolean)gameWon{
-
-    for( id element in _guessedWord){
-        
-        if([element isEqualToString:@""]){
-            return NO;
-        }
+- (void)gameflow:(NSString *)input{
+    if([self validInput:input]){
+        input = [input uppercaseString]; //forces uppercase
+        [_guessedLetters addObject:input]; //To show the user wich letters he already guessed
+        [self chooseWordSubset:input];//Updates the word list used in the game algoritem
+       
     }
-    return YES;
-            
+    
 }
 
-
-- (Boolean)gameLost{
-    if(_remainingGuesses > 0){
-        return NO;
-    }
-    else{
-        return YES;
-    }
-}
-
-
+// checks if user input is valid  (as in any letter from the) alphabet
 - (Boolean)validInput: (NSString *) input{
-    // checks if user input is valid  (as in any letter from the) alphabet
+    
     // check if input is backspace!
     if(!input.length){
         return NO;
     }
+    input = [input uppercaseString]; //forces uppercase
     
-    input = [input lowercaseString]; //forces lowercase
+    //Checks if the guessed letter has not been guessed before!
     NSCharacterSet *s = [remainingLetters invertedSet];
     NSRange r = [input rangeOfCharacterFromSet:s];
     if (r.location != NSNotFound) {
@@ -83,73 +71,63 @@
     return YES;
 }
 
-
-- (void)input: (NSString *) input{
-    // handels the input,
-    input = [input lowercaseString]; //forces lowercase
-    [self setRemainingGuesses:[self remainingGuesses]-1];
-    [_guessedLetters addObject:input];
-    [self chooseWordSubset:input]; //NSPredicate
-    //update words
-}
-
-
+// Chooses the new wordset with the evil algorithem
 - (void)chooseWordSubset: (NSString *)input{
-    NSMutableDictionary *results = [[ NSMutableDictionary alloc] init];
     
-    NSUInteger totalLength = [words count];
-    int end = pow(2,(_wordLength))-1;
-    int max = -1;
-    int bestCode =0;
-
-    for( int i = 0 ; i <= end ;i++ ){
+    int totalLength = (int)[words count];
+     NSMutableDictionary *equivalanceClasses = [[ NSMutableDictionary alloc] init];
+    
+    // loops over every word and sorts them in different equivalance classes
+    for(int i = 0; i<totalLength;i++){
+        NSString *word = [words objectAtIndex:i]; //current word
+        int code = [self indicesToCode:[self wordToIndices:word andInput:input]]; //code is the equivalance class (Check indices to co for an explanation)
+        NSMutableArray *wordlist = [NSMutableArray array];
         
-        if([self validCode:i]){
-    
-            NSMutableDictionary *result = [[ NSMutableDictionary alloc] init];
-            NSPredicate *predicate = [self makePredicateIndices:[self makeIndices:i] andInput:input];
-            NSArray *resultWords = [words filteredArrayUsingPredicate:predicate];
-            NSUInteger resultLen = [resultWords count];
-            if((int)resultLen > max){
-                max = (int)resultLen;
-                bestCode = i;
-                [result setObject:resultWords forKey:@"words"];
-                [results setObject:result forKey:[NSNumber numberWithInt:i]];
-                if(max > totalLength/2){
-                    break;
-                }
-            }
+        
+        if( [equivalanceClasses objectForKey:[NSNumber numberWithInt:code]] ){ // checks if the equivalance class alreaddy exist
+            wordlist = [equivalanceClasses objectForKey:[NSNumber numberWithInt:code]]; // if so, add
+            [wordlist addObject:word];
+            [equivalanceClasses setObject:wordlist forKey:[NSNumber numberWithInt:code]];
+        }
+        else{
+            [wordlist addObject:word];
+            [equivalanceClasses setObject:wordlist forKey:[NSNumber numberWithInt:code]]; // else create new wordlist
         }
     }
-    //
-    words = [[results objectForKey:[NSNumber numberWithInt:bestCode]] objectForKey:@"words"];
-    NSLog(@"The wordlist is: %@",words);
-    [self updateGuessedWordWithCode:bestCode andInput:input];
-
-}
-
-- (NSPredicate *)makePredicateIndices:(NSMutableArray *)indices andInput:(NSString *)input{
-
     
-    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings){
-        
-        for(int i=0; i<_wordLength;i++){
-            if([evaluatedObject characterAtIndex:i] == [input characterAtIndex:0]){
-                if( [[indices objectAtIndex:i] integerValue] == 0){
-                    return NO;
-                }
-            }
-            if([evaluatedObject characterAtIndex:i] != [input characterAtIndex:0]){
-                if( [[indices objectAtIndex:i] integerValue] == 1){
-                    return NO;
-                }
-            }
+    // Determane the largest equivalance class
+    int maxLength =0;
+    int optimalCode =0;
+    int iLength =0;
+    for(id element in equivalanceClasses){
+        iLength = (int)[[equivalanceClasses objectForKey:element] count];
+        if( iLength > maxLength){
+            maxLength = iLength ;
+            optimalCode = (int)[element integerValue];
         }
-        return YES;
-    }];
+    }
+    //updates wordlist
+    words = [equivalanceClasses objectForKey:[NSNumber numberWithInt:optimalCode]];
     
-    return predicate;
+    // picks a random correct word as the 'awnser' (to show when de user has defeated)
+    totalLength = (int)[words count];
+    int randomIndex;
+    if(totalLength>1){
+        randomIndex = arc4random() % (totalLength-1);
+    }
+    else{
+        randomIndex = 0;
+    }
+    _aRandomCorrectWord = [words objectAtIndex:randomIndex];
+
+    //Update the letters that has been guessed correctly (for the output)
+    [self updateGuessedWordWithCode:optimalCode andInput:input];
+    if(optimalCode == 0){
+        [self setRemainingGuesses:[self remainingGuesses]-1];
+    }
+    
 }
+
 
 -(NSMutableArray *)makeIndices:(int)code{
     
@@ -168,24 +146,65 @@
     return indices;
 }
 
--(Boolean)validCode:(int)code{
-    NSMutableArray *indices =[self makeIndices:code];
-    for(int i = 0;i<_wordLength;i++)
-        if([indices objectAtIndex:i] == [NSNumber numberWithInt:1] && ![[_guessedWord objectAtIndex:i] isEqualToString:@""]){
-            return NO;
+// transfers a range of indices to a number using binairy numbers. i.e [0,1,1,0,0] = (0*1 + 0*2 + 1*4 + 1*8 +0*16 = 12) each code represents an equivalance class
+- (int)indicesToCode:(NSMutableArray *)indices{
+    int code=0;
+    for(int i = 0; i<_wordLength;i++){
+        if([indices objectAtIndex:i] == [NSNumber numberWithInt:1]){
+            code = code + pow(2,_wordLength-i-1);
         }
-    
-    
-    return YES;
+    }
+    return code;
 }
 
+// transfers a word and a inputletter to a range of indices. The index will be 0 if the word has a different letter than the inputletter and 1 if the letters are the same. (i.e.  word: CALL and letter L -> [0,0,1,1]
+- (NSMutableArray *)wordToIndices: (NSString *)word andInput:(NSString *)input{
+    NSMutableArray *indices = [NSMutableArray array];
+    for(int i =0; i<_wordLength;i++){
+        if([word characterAtIndex:i] == [input characterAtIndex:0]){
+            [indices setObject:[NSNumber numberWithInt:1] atIndexedSubscript:i];
+        }
+        else{
+            [indices setObject:[NSNumber numberWithInt:0] atIndexedSubscript:i];
+        }
+        
+    }
+    
+    return indices;
+    
+}
+
+
+//Updates the correctly guessed letters
 - (void)updateGuessedWordWithCode:(int)code andInput:(NSString *)input{
     NSMutableArray *indices =[self makeIndices:code];
     for(int i = 0;i<_wordLength;i++)
         if([indices objectAtIndex:i] == [NSNumber numberWithInt:1]){
             [_guessedWord setObject:input atIndexedSubscript:i];
         }
-
 }
+
+// Checks if the game is won
+- (Boolean)gameWon{
+    
+    for( id element in _guessedWord){
+        if([element isEqualToString:@""]){
+            return NO;
+        }
+    }
+    return YES;
+}
+
+// Checks if the game is lost
+- (Boolean)gameLost{
+    if(_remainingGuesses > 0){
+        return NO;
+    }
+    else{
+        return YES;
+    }
+}
+
+
 @end
 
